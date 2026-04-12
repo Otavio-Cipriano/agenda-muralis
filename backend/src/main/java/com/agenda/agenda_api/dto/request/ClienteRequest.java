@@ -4,6 +4,10 @@ import com.agenda.agenda_api.model.Cliente;
 import com.agenda.agenda_api.model.Contato;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,8 +15,12 @@ import java.util.List;
 
 @Schema(name = "CadastroCliente", description = "Dados para cadastro de cliente")
 public record ClienteRequest(
-        @NotBlank String nome,
-        @NotBlank String cpf,
+        @Size(min = 2, max = 100)
+        @Pattern(regexp = "^[a-zA-ZÀ-ú\\s]+$", message = "Nome deve conter apenas letras")
+        @NotBlank
+        String nome,
+        @CPF @NotBlank String cpf,
+        @Past(message = "Data de nascimento deve ser uma data passada")
         LocalDate dataNascimento,
         String endereco,
         List<ContatoRequest> contatos
@@ -20,7 +28,7 @@ public record ClienteRequest(
     public Cliente toEntity() {
         Cliente cliente = new Cliente();
         cliente.setNome(this.nome);
-        cliente.setCpf(this.cpf);
+        cliente.setCpf(this.cpf.trim());
         cliente.setDataNascimento(this.dataNascimento);
         cliente.setEndereco(this.endereco);
 

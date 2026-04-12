@@ -2,6 +2,9 @@ package com.agenda.agenda_api.service;
 
 import com.agenda.agenda_api.model.Cliente;
 import com.agenda.agenda_api.repository.ClienteRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,14 +12,19 @@ import java.util.List;
 @Service
 public class ClienteService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
     private final ClienteRepository clienteRepository;
 
     public ClienteService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
+    @Transactional
     public Cliente create(Cliente cliente) {
-        return clienteRepository.save(cliente);
+        Cliente salvo = clienteRepository.save(cliente);
+        entityManager.refresh(salvo);
+        return salvo;
     }
 
     public List<Cliente> list() {
