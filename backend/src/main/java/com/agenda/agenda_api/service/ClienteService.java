@@ -23,6 +23,11 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
+    public Cliente getCliente(Long id){
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+    }
+
     public Cliente update(Long id, Cliente clienteAtualizado) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));

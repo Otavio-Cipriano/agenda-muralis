@@ -2,7 +2,9 @@ package com.agenda.agenda_api.dto.response;
 
 import com.agenda.agenda_api.enums.TipoContato;
 import com.agenda.agenda_api.model.Contato;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(name = "DadosContato", description = "Dados do contato")
 public record ContatoResponse(
         Long id,
         TipoContato tipo,

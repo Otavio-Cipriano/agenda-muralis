@@ -6,26 +6,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 
-
-@Schema(name = "DadosCliente", description = "Dados do cliente")
-public record ClienteResponse(
+@Schema(name = "DadosResumindosCliente", description = "Dados resumidos do cliente")
+public record ClienteResumoResponse(
         Long id,
         String nome,
         String cpf,
         LocalDate dataNascimento,
-        String endereco,
-        List<ContatoResponse> contatos
+        String enderecos
 ) {
-    public static ClienteResponse fromEntity(Cliente cliente) {
-        return new ClienteResponse(
+    public static ClienteResumoResponse fromEntity(Cliente cliente) {
+        return new ClienteResumoResponse(
                 cliente.getId(),
                 cliente.getNome(),
                 cliente.getCpf(),
                 cliente.getDataNascimento(),
-                cliente.getEndereco(),
-                cliente.getContatos().stream()
-                        .map(ContatoResponse::fromEntity)
-                        .toList()
+                cliente.getEndereco()
         );
     }
 }
