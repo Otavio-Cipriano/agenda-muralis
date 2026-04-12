@@ -5,7 +5,10 @@ import com.agenda.agenda_api.repository.ClienteRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -27,12 +30,13 @@ public class ClienteService {
         return salvo;
     }
 
-    public List<Cliente> list() {
-        return clienteRepository.findAll();
+    public Page<Cliente> list(Pageable pageable) {
+        return clienteRepository.findAll(pageable);
     }
 
-    public Cliente getCliente(Long id){
-        return clienteRepository.findById(id)
+    @Transactional
+    public Cliente findById(Long id){
+        return clienteRepository.findByIdWithContatos(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 

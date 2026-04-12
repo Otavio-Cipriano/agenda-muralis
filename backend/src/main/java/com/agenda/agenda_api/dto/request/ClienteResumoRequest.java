@@ -10,11 +10,9 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Schema(name = "CadastroCliente", description = "Dados para cadastro de cliente")
-public record ClienteRequest(
+public record ClienteResumoRequest(
         @Schema(example = "João Silva")
         @Size(min = 2, max = 100)
         @Pattern(regexp = "^[\\p{L}\\s'-]+$", message = "Nome deve conter apenas letras")
@@ -25,8 +23,7 @@ public record ClienteRequest(
         String cpf,
         @Past(message = "Data de nascimento deve ser uma data passada")
         LocalDate dataNascimento,
-        String endereco,
-        List<ContatoRequest> contatos
+        String endereco
 ) {
     public Cliente toEntity() {
         Cliente cliente = new Cliente();
@@ -34,14 +31,6 @@ public record ClienteRequest(
         cliente.setCpf(this.cpf.trim());
         cliente.setDataNascimento(this.dataNascimento);
         cliente.setEndereco(this.endereco);
-
-
-        if (this.contatos != null) {
-            for (ContatoRequest contatoRequest : this.contatos) {
-                Contato contato = contatoRequest.toEntity(cliente);
-                cliente.getContatos().add(contato);
-            }
-        }
 
         return cliente;
     }
