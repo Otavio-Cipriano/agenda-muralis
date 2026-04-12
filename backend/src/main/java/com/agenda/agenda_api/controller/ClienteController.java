@@ -43,8 +43,8 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> update(@PathVariable Long id, @RequestBody @Valid ClienteRequest request) {
-        return ResponseEntity.ok(ClienteResponse.fromEntity(clienteService.update(id, request.toEntity())));
+    public ResponseEntity<ClienteResumoResponse> update(@PathVariable Long id, @RequestBody @Valid ClienteRequest request) {
+        return ResponseEntity.ok(ClienteResumoResponse.fromEntity(clienteService.update(id, request.toEntity())));
     }
 
     @DeleteMapping("/{id}")

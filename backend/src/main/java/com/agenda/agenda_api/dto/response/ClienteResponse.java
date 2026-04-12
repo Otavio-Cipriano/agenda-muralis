@@ -4,6 +4,7 @@ import com.agenda.agenda_api.model.Cliente;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -14,7 +15,9 @@ public record ClienteResponse(
         String cpf,
         LocalDate dataNascimento,
         String endereco,
-        List<ContatoResponse> contatos
+        List<ContatoResponse> contatos,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
     public static ClienteResponse fromEntity(Cliente cliente) {
         return new ClienteResponse(
@@ -25,7 +28,9 @@ public record ClienteResponse(
                 cliente.getEndereco(),
                 cliente.getContatos().stream()
                         .map(ContatoResponse::fromEntity)
-                        .toList()
+                        .toList(),
+                cliente.getCreatedAt(),
+                cliente.getUpdatedAt()
         );
     }
 }
