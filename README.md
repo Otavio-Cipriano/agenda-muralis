@@ -140,13 +140,23 @@ README.md
 * **JavaScript**
 * **Bootstrap** (framework de estilização)
 
-### ⚙️ Ferramentas & Outros
 
-* **Maven Wrapper** (mvnw)
-* **DevTools** (hot reload em desenvolvimento)
+## Dependências
 
----
 
+- **spring-boot-starter-webmvc** → cria APIs REST
+- **spring-boot-starter-data-jpa** → acesso ao banco
+- **spring-boot-starter-validation** → validação de DTOs
+- **flyway-mysql** → migração do banco
+- **mysql-connector-j** → conexão com MySQL
+- **lombok** → reduz código repetitivo
+- **springdoc-openapi** → Swagger (documentação da API)
+
+## Inicialização do Projeto
+
+O backend foi gerado utilizando o [Spring Initializr](https://start.spring.io/), ferramenta oficial para criação de projetos Spring Boot com configuração inicial de dependências.
+
+A partir dele foram adicionadas e configuradas manualmente as dependências e estrutura do projeto.
 
 ## Features
 ### Back-end
