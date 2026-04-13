@@ -40,6 +40,10 @@ public class ClienteService {
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 
+    public Page<Cliente> search(String busca, Pageable pageable) {
+        return clienteRepository.findByNomeOrCpf(busca, pageable);
+    }
+
     public Cliente update(Long id, Cliente clienteAtualizado) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));

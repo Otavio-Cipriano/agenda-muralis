@@ -6,74 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
     <style>
-        .badge-status {
-            font-size: 11px;
-            padding: 3px 8px;
-        }
-
-        .btn-icon {
-            width: 30px;
-            height: 30px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-        }
-
-        .detail-label {
-            font-size: 12px;
-            color: var(--bs-secondary);
-            margin-bottom: 2px;
-        }
-
-        .detail-value {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .avatar-lg {
-            width: 64px;
-            height: 64px;
-            font-size: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 600;
-            margin: 0 auto 12px;
-        }
-
-        @media (max-width: 576px) {
-            .hide-mobile {
-                display: none !important;
-            }
-        }
+        .badge-status  { font-size: 11px; padding: 3px 8px; }
+        .btn-icon      { width: 30px; height: 30px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+        .detail-label  { font-size: 12px; color: var(--bs-secondary); margin-bottom: 2px; }
+        .detail-value  { font-size: 14px; font-weight: 500; }
+        .avatar-lg     { width: 64px; height: 64px; font-size: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; margin: 0 auto 12px; }
+        .section-label { font-size: 13px; color: var(--bs-secondary); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; margin-bottom: 8px; }
+        @media (max-width: 576px) { .hide-mobile { display: none !important; } }
     </style>
 </head>
 
 <body>
 
+    <!-- ═══════════════════════════════════════════════════════
+         PÁGINA PRINCIPAL
+    ════════════════════════════════════════════════════════ -->
     <div class="container-fluid py-4">
+
         <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
             <div>
                 <h4 class="mb-0 fw-semibold">Clientes</h4>
                 <small class="text-muted">Listagem de clientes cadastrados</small>
             </div>
             <div class="d-flex gap-2">
-                <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Buscar cliente..."
-                    style="width:200px;" oninput="filtrar()">
-                <button class="btn btn-sm btn-primary"  onclick="abrirCriarCliente()">+ Novo Cliente</button>
+                <div class="input-group input-group-sm" style="width:250px;">
+                    <input type="text" id="searchInput" class="form-control"
+                        placeholder="Buscar por nome ou CPF..."
+                        onkeydown="if(event.key==='Enter') filtrar()">
+                    <button class="btn btn-outline-secondary" onclick="filtrar()" title="Pesquisar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
+                        </svg>
+                    </button>
+                    <button class="btn btn-outline-secondary" id="btnLimpar" onclick="limparBusca()" title="Limpar busca" style="display:none;">✕</button>
+                </div>
+                <button class="btn btn-sm btn-primary" onclick="abrirCriarCliente()">+ Novo Cliente</button>
             </div>
         </div>
 
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="tabelaClientes">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th class="ps-3 py-3" style="width:36px;">
@@ -100,62 +75,9 @@
         </div>
     </div>
 
-    <!-- Modal de Edição -->
-    <div class="modal fade" id="modalEditar" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header border-0 pb-0">
-                    <h6 class="modal-title fw-semibold text-muted">Editar Cliente</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body pt-2">
-
-                    <!-- Form Cliente -->
-                    <p class="fw-semibold mb-2"
-                        style="font-size:13px;color:var(--bs-secondary);text-transform:uppercase;letter-spacing:.05em;">
-                        Dados do Cliente</p>
-                    <div class="row g-2 mb-4">
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">Nome</label>
-                            <input type="text" id="editNome" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">CPF</label>
-                            <input type="text" id="editCpf" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">Data de Nascimento</label>
-                            <input type="date" id="editNasc" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">Endereço</label>
-                            <input type="text" id="editEnd" class="form-control form-control-sm">
-                        </div>
-                    </div>
-
-                    <hr class="my-3">
-
-                    <!-- Contatos -->
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <p class="fw-semibold mb-0"
-                            style="font-size:13px;color:var(--bs-secondary);text-transform:uppercase;letter-spacing:.05em;">
-                            Contatos</p>
-                        <button class="btn btn-sm btn-outline-primary" style="font-size:12px;"
-                            onclick="adicionarContato()">+ Adicionar contato</button>
-                    </div>
-
-                    <div id="listaContatos"></div>
-
-                </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-sm btn-primary" onclick="salvarEdicao()">Salvar alterações</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Detalhes -->
+    <!-- ═══════════════════════════════════════════════════════
+         MODAL — DETALHES DO CLIENTE
+    ════════════════════════════════════════════════════════ -->
     <div class="modal fade" id="modalDetalhes" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -164,6 +86,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body pt-2">
+
                     <div class="text-center mb-3">
                         <div class="avatar-lg" id="mdAvatar"></div>
                         <h5 class="mb-0 fw-semibold" id="mdNome"></h5>
@@ -194,12 +117,12 @@
                             <div class="detail-value" id="mdEnd"></div>
                         </div>
                     </div>
+
                     <hr class="my-3">
 
-                    <div>
-                        <div class="detail-label mb-2">Contatos</div>
-                        <div id="mdContatos"></div>
-                    </div>
+                    <div class="detail-label mb-2">Contatos</div>
+                    <div id="mdContatos"></div>
+
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -208,7 +131,115 @@
             </div>
         </div>
     </div>
-    <!-- Modal Confirmar Delete -->
+
+    <!-- ═══════════════════════════════════════════════════════
+         MODAL — CRIAR CLIENTE
+    ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="modalCriar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h6 class="modal-title fw-semibold text-muted">Novo Cliente</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-2">
+
+                    <div id="criarErro" class="alert alert-danger d-none" style="font-size:13px;"></div>
+
+                    <p class="section-label">Dados do Cliente</p>
+                    <div class="row g-2 mb-4">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">Nome <span class="text-danger">*</span></label>
+                            <input type="text" id="criarNome" class="form-control form-control-sm" placeholder="Nome completo">
+                            <div class="invalid-feedback">Nome é obrigatório.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">CPF <span class="text-danger">*</span></label>
+                            <input type="text" id="criarCpf" class="form-control form-control-sm" placeholder="000.000.000-00">
+                            <div class="invalid-feedback">CPF é obrigatório.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">Data de Nascimento</label>
+                            <input type="date" id="criarNasc" class="form-control form-control-sm">
+                            <div class="invalid-feedback">Data de nascimento não pode ser hoje ou no futuro.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">Endereço</label>
+                            <input type="text" id="criarEnd" class="form-control form-control-sm" placeholder="Rua, número, cidade...">
+                        </div>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <p class="section-label mb-0">Contatos</p>
+                        <button class="btn btn-sm btn-outline-primary" style="font-size:12px;" onclick="adicionarContatoNovo()">+ Adicionar contato</button>
+                    </div>
+                    <div id="listaContatosNovo"></div>
+
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-sm btn-primary" onclick="salvarNovoCliente()">Salvar cliente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         MODAL — EDITAR CLIENTE
+    ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="modalEditar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h6 class="modal-title fw-semibold text-muted">Editar Cliente</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-2">
+
+                    <p class="section-label">Dados do Cliente</p>
+                    <div class="row g-2 mb-4">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">Nome <span class="text-danger">*</span></label>
+                            <input type="text" id="editNome" class="form-control form-control-sm">
+                            <div class="invalid-feedback">Nome é obrigatório.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">CPF <span class="text-danger">*</span></label>
+                            <input type="text" id="editCpf" class="form-control form-control-sm" placeholder="000.000.000-00">
+                            <div class="invalid-feedback">CPF é obrigatório.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">Data de Nascimento</label>
+                            <input type="date" id="editNasc" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-size:12px;">Endereço</label>
+                            <input type="text" id="editEnd" class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <p class="section-label mb-0">Contatos</p>
+                        <button class="btn btn-sm btn-outline-primary" style="font-size:12px;" onclick="adicionarContato()">+ Adicionar contato</button>
+                    </div>
+                    <div id="listaContatos"></div>
+
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-sm btn-primary" onclick="salvarEdicao()">Salvar alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         MODAL — CONFIRMAR DELETE CONTATO
+    ════════════════════════════════════════════════════════ -->
     <div class="modal fade" id="modalConfirmarDelete" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow">
@@ -225,90 +256,28 @@
         </div>
     </div>
 
-    <!-- Modal Criar Cliente -->
-    <div class="modal fade" id="modalCriar" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    <!-- ═══════════════════════════════════════════════════════
+         MODAL — CONFIRMAR DELETE CLIENTE
+    ════════════════════════════════════════════════════════ -->
+    <div class="modal fade" id="modalConfirmarDeleteCliente" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow">
-                <div class="modal-header border-0 pb-0">
-                    <h6 class="modal-title fw-semibold text-muted">Novo Cliente</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-body text-center py-4">
+                    <div class="mb-3" style="font-size:32px;">⚠️</div>
+                    <h6 class="fw-semibold mb-1">Remover cliente?</h6>
+                    <p class="text-muted mb-0" style="font-size:13px;">Essa ação não pode ser desfeita.</p>
+                    <p class="fw-semibold mt-2 mb-0" style="font-size:13px;" id="deleteClienteNome"></p>
                 </div>
-                <div class="modal-body pt-2">
-
-                    <!-- Erro backend -->
-                    <div id="criarErro" class="alert alert-danger d-none" style="font-size:13px;"></div>
-
-                    <!-- Form Cliente -->
-                    <p class="fw-semibold mb-2"
-                        style="font-size:13px;color:var(--bs-secondary);text-transform:uppercase;letter-spacing:.05em;">
-                        Dados do Cliente</p>
-                    <div class="row g-2 mb-4">
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">Nome <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" id="criarNome" class="form-control form-control-sm"
-                                placeholder="Nome completo">
-                            <div class="invalid-feedback">Nome é obrigatório.</div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">CPF <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" id="criarCpf" class="form-control form-control-sm"
-                                placeholder="000.000.000-00">
-                            <div class="invalid-feedback">CPF é obrigatório.</div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">Data de Nascimento</label>
-                            <input type="date" id="criarNasc" class="form-control form-control-sm">
-                            <div class="invalid-feedback">Data de nascimento não pode ser hoje ou no futuro.</div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label" style="font-size:12px;">Endereço</label>
-                            <input type="text" id="criarEnd" class="form-control form-control-sm"
-                                placeholder="Rua, número, cidade...">
-                        </div>
-                    </div>
-
-                    <hr class="my-3">
-
-                    <!-- Contatos -->
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <p class="fw-semibold mb-0"
-                            style="font-size:13px;color:var(--bs-secondary);text-transform:uppercase;letter-spacing:.05em;">
-                            Contatos</p>
-                        <button class="btn btn-sm btn-outline-primary" style="font-size:12px;"
-                            onclick="adicionarContatoNovo()">+ Adicionar contato</button>
-                    </div>
-                    <div id="listaContatosNovo"></div>
-
-                </div>
-                <div class="modal-footer border-0 pt-0">
+                <div class="modal-footer border-0 justify-content-center pt-0 gap-2">
                     <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-sm btn-primary" onclick="salvarNovoCliente()">Salvar cliente</button>
+                    <button class="btn btn-sm btn-danger" onclick="executarDeletarCliente()">Sim, remover</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal Confirmar Delete Cliente -->
-<div class="modal fade" id="modalConfirmarDeleteCliente" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-body text-center py-4">
-                <div class="mb-3" style="font-size:32px;">⚠️</div>
-                <h6 class="fw-semibold mb-1">Remover cliente?</h6>
-                <p class="text-muted mb-0" style="font-size:13px;">Essa ação não pode ser desfeita.</p>
-                <p class="fw-semibold mt-2 mb-0" style="font-size:13px;" id="deleteClienteNome"></p>
-            </div>
-            <div class="modal-footer border-0 justify-content-center pt-0 gap-2">
-                <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-sm btn-danger" onclick="executarDeletarCliente()">Sim, remover</button>
-            </div>
-        </div>
-    </div>
-</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

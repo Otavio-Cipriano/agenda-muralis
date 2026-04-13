@@ -7,7 +7,9 @@ CREATE TABLE cliente (
   nome VARCHAR(100) NOT NULL,
   cpf VARCHAR(14) NOT NULL UNIQUE,
   data_nascimento DATE,
-  endereco varchar(255)
+  endereco varchar(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE contato (
@@ -16,5 +18,7 @@ CREATE TABLE contato (
   tipo VARCHAR(50) NOT NULL,
   valor VARCHAR(100) NOT NULL,
   observacao VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
 );

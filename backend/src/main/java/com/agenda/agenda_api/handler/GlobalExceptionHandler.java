@@ -3,6 +3,7 @@ package com.agenda.agenda_api.handler;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,5 +49,18 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        Map<String, String> error = new HashMap<>();
+
+        if (ex.getMessage().contains("TipoContato")) {
+            error.put("tipo", "Tipo de contato inválido. Valores aceitos: TELEFONE, EMAIL");
+        } else {
+            error.put("erro", "Requisição inválida");
+        }
+
+        return ResponseEntity.badRequest().body(error);
     }
 }

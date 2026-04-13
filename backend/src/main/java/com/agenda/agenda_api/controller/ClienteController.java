@@ -56,6 +56,13 @@ public class ClienteController {
         return ResponseEntity.ok(ClienteResponse.fromEntity(clienteService.findById(id)));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<ClienteResumoResponse>> search(
+            @RequestParam String busca, Pageable pageable) {
+        return ResponseEntity.ok(clienteService.search(busca, pageable)
+                .map(ClienteResumoResponse::fromEntity));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ClienteResumoResponse> update(@PathVariable Long id, @RequestBody @Valid ClienteResumoRequest request) {
         return ResponseEntity.ok(ClienteResumoResponse.fromEntity(clienteService.update(id, request.toEntity())));
