@@ -219,6 +219,11 @@ springdoc.default-flat-param-object=true
 
 ### Backend
 
+va até a pasta backend:
+```Bash
+cd backend
+```
+
 ```Bash
 mvn spring-boot:run
 ```
